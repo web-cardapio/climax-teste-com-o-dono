@@ -6,15 +6,14 @@
 }
 
 :root {
-    /* CORES EXATAS DA SUA LOGO - Azul marinho escuro + azul vibrante */
-    --primary: #0a2472;        /* Azul marinho escuro - principal */
-    --primary-dark: #061852;    /* Azul ainda mais escuro */
-    --primary-light: #e8edf9;   /* Azul bem clarinho */
+    --primary: #0a2472;
+    --primary-dark: #061852;
+    --primary-light: #e8edf9;
     --primary-gradient: linear-gradient(135deg, #0a2472 0%, #1a4a9e 100%);
     
-    --secondary: #2196f3;       /* Azul vibrante - destaques */
+    --secondary: #2196f3;
     --secondary-dark: #1976d2;
-    --accent: #42a5f5;          /* Azul médio */
+    --accent: #42a5f5;
     --accent-light: #90caf9;
     
     --black: #1a1a2e;
@@ -116,7 +115,6 @@ h3 { font-size: 1.25rem; }
     width: 100%;
 }
 
-/* Remove focus outline de botões (já temos shadow no focus dos inputs) */
 .btn:focus {
     outline: none;
     box-shadow: var(--shadow-focus);
@@ -141,7 +139,6 @@ h3 { font-size: 1.25rem; }
     height: 80px;
 }
 
-/* LOGO COM IMAGEM - CORES DA SUA LOGO */
 .logo {
     display: flex;
     align-items: center;
@@ -205,7 +202,6 @@ h3 { font-size: 1.25rem; }
     color: var(--secondary);
 }
 
-/* Mobile Menu */
 .mobile-menu-btn {
     display: none;
     flex-direction: column;
@@ -256,7 +252,6 @@ h3 { font-size: 1.25rem; }
 }
 
 .hero h1 .highlight {
-    color: var(--secondary);
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     background-clip: text;
     -webkit-background-clip: text;
@@ -275,7 +270,6 @@ h3 { font-size: 1.25rem; }
     flex-wrap: wrap;
 }
 
-/* AC Illustration */
 .hero-image {
     display: flex;
     justify-content: center;
@@ -308,13 +302,7 @@ h3 { font-size: 1.25rem; }
     left: 10%;
     right: 10%;
     height: 16px;
-    background: repeating-linear-gradient(
-        90deg,
-        #ccc 0px,
-        #ccc 3px,
-        #e0e0e0 3px,
-        #e0e0e0 8px
-    );
+    background: repeating-linear-gradient(90deg, #ccc 0px, #ccc 3px, #e0e0e0 3px, #e0e0e0 8px);
     border-radius: 4px;
 }
 
@@ -535,7 +523,6 @@ h3 { font-size: 1.25rem; }
     font-weight: 700;
 }
 
-/* FORM */
 .booking-form {
     background: var(--gray-100);
     padding: 36px;
@@ -661,26 +648,56 @@ h3 { font-size: 1.25rem; }
     padding-bottom: 35px;
     border-bottom: 1px solid rgba(255,255,255,0.1);
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 30px;
 }
 
 .footer-brand {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    gap: 12px;
 }
 
-.footer-brand img {
-    height: 40px;
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.1);
+    padding: 6px 18px 6px 12px;
+    border-radius: 12px;
+}
+
+.footer-logo-image {
+    height: 38px;
     width: auto;
-    margin-bottom: 10px;
-    filter: brightness(0) invert(1);
+    border-radius: 8px;
+}
+
+.footer-logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-logo-name {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+.footer-logo-tagline {
+    font-size: 0.5rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .footer-brand p {
     color: rgba(255,255,255,0.7);
     font-size: 0.8rem;
-    max-width: 300px;
+    max-width: 280px;
+    margin-top: 5px;
 }
 
 .footer-links {
@@ -836,7 +853,7 @@ h3 { font-size: 1.25rem; }
     .rating-number { font-size: 2.5rem; }
 }
 
-/* ===== CORREÇÕES DE FOCUS - APENAS INPUTS ===== */
+/* ===== CORREÇÕES DE FOCUS ===== */
 button:focus,
 a:focus,
 .nav a:focus,
@@ -844,7 +861,6 @@ a:focus,
     outline: none;
 }
 
-/* Garante que apenas inputs do formulário tenham o focus azul */
 input:focus,
 select:focus,
 textarea:focus {
@@ -852,6 +868,7 @@ textarea:focus {
     border-color: var(--secondary);
     box-shadow: var(--shadow-focus);
 }
+
 /* Remove a seleção e o cursor de texto ao clicar nos elementos do site */
 body {
     -webkit-user-select: none;  /* Safari */
