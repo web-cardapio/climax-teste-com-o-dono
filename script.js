@@ -1,34 +1,148 @@
-// Aguarda o DOM carregar completamente
+// ===== CARROSSEL DE FOTOS =====
 document.addEventListener('DOMContentLoaded', function() {
     
-    const form = document.getElementById('booking-form');
-    const submitBtn = document.querySelector('#booking-form .btn-primary');
-    const btnText = document.querySelector('#booking-form .btn-text');
-    const btnLoading = document.querySelector('#booking-form .btn-loading');
-    const modal = document.getElementById('success-modal');
+    const track = document.getElementById('sliderTrack');
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
     
-    // Número do WhatsApp para envio
-    const WHATSAPP_NUM = '5581999362194';
+    let currentIndex = 0;
+    let autoInterval;
+    const totalSlides = slides.length;
     
-    // Função para fechar modal (global)
-    window.closeModal = function() {
-        if(modal) {
-            modal.style.display = 'none';
-            modal.setAttribute('hidden', 'hidden');
-            document.body.style.overflow = '';
+    // Função para atualizar o carrossel
+    function updateSlider() {
+        if (track) {
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
         }
-    };
+        
+        // Atualizar dots
+        dots.forEach((dot, index) => {
+            if (index === currentIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
     
-    // Função para mostrar modal
-    function showModal() {
-        if(modal) {
-            modal.removeAttribute('hidden');
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
+    // Função para ir para o próximo slide
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % totalSlides;
+        updateSlider();
+        resetAutoSlide();
+    }
+    
+    // Função para ir para o slide anterior
+    function prevSlide() {
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        updateSlider();
+        resetAutoSlide();
+    }
+    
+    // Função para ir para um slide específico
+    function goToSlide(index) {
+        currentIndex = index;
+        updateSlider();
+        resetAutoSlide();
+    }
+    
+    // Auto slide a cada 4 segundos
+    function startAutoSlide() {
+        autoInterval = setInterval(() => {
+            nextSlide();
+        }, 4000);
+    }
+    
+    function stopAutoSlide() {
+        if (autoInterval) {
+            clearInterval(autoInterval);
         }
     }
     
-    // Função para formatar a mensagem do WhatsApp (SEM EMOJIS PROBLEMATICOS)
+    function resetAutoSlide() {
+        stopAutoSlide();
+        startAutoSlide();
+    }
+    
+    // Eventos dos botões
+    if (prevBtn) {
+        prevBtn.addEventListener('click', function() {
+            prevSlide();
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', function() {
+            nextSlide();
+        });
+    }
+    
+    // Eventos dos dots
+    dots.forEach(dot => {
+        dot.addEventListener('click', function() {
+            const index = parseInt(this.getAttribute('data-index'));
+            goToSlide(index);
+        });
+    });
+    
+    // Pausar auto slide quando o mouse está sobre o carrossel
+    const sliderContainer = document.querySelector('.slider-container');
+    if (sliderContainer) {
+        sliderContainer.addEventListener('mouseenter', function() {
+            stopAutoSlide();
+        });
+        
+        sliderContainer.addEventListener('mouseleave', function() {
+            startAutoSlide();
+        });
+    }
+    
+    // Iniciar o carrossel
+    updateSlider();
+    startAutoSlide();
+    
+    console.log('Carrossel iniciado com sucesso!');
+});
+
+// ===== MOBILE MENU =====
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileBtn = document.querySelector('.mobile-menu-btn');
+    const nav = document.querySelector('.nav');
+    
+    if (mobileBtn && nav) {
+        mobileBtn.addEventListener('click', function() {
+            nav.classList.toggle('active');
+        });
+    }
+});
+
+// ===== FECHAR MODAL =====
+window.closeModal = function() {
+    const modal = document.getElementById('success-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        modal.setAttribute('hidden', 'hidden');
+    }
+}
+
+function showModal() {
+    const modal = document.getElementById('success-modal');
+    if (modal) {
+        modal.removeAttribute('hidden');
+        modal.style.display = 'flex';
+    }
+}
+
+// ===== FORMULÁRIO DE AGENDAMENTO =====
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('booking-form');
+    const btnText = document.querySelector('.btn-text');
+    const btnLoading = document.querySelector('.btn-loading');
+    const submitBtn = document.querySelector('#booking-form .btn-primary');
+    const WHATSAPP_NUM = '5581999362194';
+    
     function formatarMensagem(dados) {
         let msg = "*NOVO AGENDAMENTO - CLIMAX*%0A%0A";
         msg += "Nome: " + dados.nome + "%0A";
@@ -43,8 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return msg;
     }
     
-    // Função para validar o formulário
-    function validarFormulario() {
+    function validarForm() {
         const nome = document.getElementById('nome').value.trim();
         const telefone = document.getElementById('telefone').value.trim();
         const endereco = document.getElementById('endereco').value.trim();
@@ -52,39 +165,56 @@ document.addEventListener('DOMContentLoaded', function() {
         const data = document.getElementById('data').value;
         const periodo = document.getElementById('periodo').value;
         
-        if(!nome) {
-            alert('Por favor, informe seu nome completo.');
-            return false;
-        }
-        if(!telefone) {
-            alert('Informe seu telefone/WhatsApp.');
-            return false;
-        }
-        if(!endereco) {
-            alert('Informe seu endereco.');
-            return false;
-        }
-        if(!servico) {
-            alert('Selecione o tipo de servico.');
-            return false;
-        }
-        if(!data) {
-            alert('Selecione a data preferida.');
-            return false;
-        }
-        if(!periodo) {
-            alert('Selecione o periodo.');
-            return false;
-        }
+        if(!nome) { alert("Por favor, informe seu nome completo."); return false; }
+        if(!telefone) { alert("Informe seu telefone/WhatsApp."); return false; }
+        if(!endereco) { alert("Informe seu endereço."); return false; }
+        if(!servico) { alert("Selecione o tipo de serviço."); return false; }
+        if(!data) { alert("Selecione a data preferida."); return false; }
+        if(!periodo) { alert("Selecione o período."); return false; }
         
-        // Validar telefone (mínimo 10 dígitos)
         const telefoneLimpo = telefone.replace(/\D/g, '');
         if(telefoneLimpo.length < 10 || telefoneLimpo.length > 11) {
-            alert('Digite um telefone valido com DDD (ex: 81999999999)');
+            alert("Digite um telefone válido (ex: 81999999999)");
             return false;
         }
-        
         return true;
+    }
+    
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if(!validarForm()) return;
+            
+            const dados = {
+                nome: document.getElementById('nome').value.trim(),
+                telefone: document.getElementById('telefone').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                endereco: document.getElementById('endereco').value.trim(),
+                servico: document.getElementById('servico').options[document.getElementById('servico').selectedIndex]?.text,
+                data: document.getElementById('data').value,
+                periodo: document.getElementById('periodo').options[document.getElementById('periodo').selectedIndex]?.text,
+                descricao: document.getElementById('descricao').value.trim()
+            };
+            
+            if(btnText && btnLoading) {
+                btnText.style.display = 'none';
+                btnLoading.style.display = 'inline';
+            }
+            if(submitBtn) submitBtn.disabled = true;
+            
+            const mensagem = formatarMensagem(dados);
+            const url = 'https://wa.me/' + WHATSAPP_NUM + '?text=' + mensagem;
+            window.open(url, '_blank');
+            
+            form.reset();
+            showModal();
+            
+            if(btnText && btnLoading) {
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
+            }
+            if(submitBtn) submitBtn.disabled = false;
+        });
     }
     
     // Máscara para telefone
@@ -103,65 +233,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Definir data mínima como hoje
+    // Data mínima = hoje
     const dataInput = document.getElementById('data');
     if(dataInput) {
         const hoje = new Date().toISOString().split('T')[0];
         dataInput.setAttribute('min', hoje);
     }
-    
-    // Evento de submit do formulário
-    if(form) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            if(!validarFormulario()) return;
-            
-            // Coletar os dados do formulário
-            const dados = {
-                nome: document.getElementById('nome').value.trim(),
-                telefone: document.getElementById('telefone').value.trim(),
-                email: document.getElementById('email').value.trim(),
-                endereco: document.getElementById('endereco').value.trim(),
-                servico: document.getElementById('servico').options[document.getElementById('servico').selectedIndex]?.text || document.getElementById('servico').value,
-                data: document.getElementById('data').value,
-                periodo: document.getElementById('periodo').options[document.getElementById('periodo').selectedIndex]?.text || document.getElementById('periodo').value,
-                descricao: document.getElementById('descricao').value.trim()
-            };
-            
-            // Mostrar loading
-            if(btnText && btnLoading) {
-                btnText.style.display = 'none';
-                btnLoading.style.display = 'inline';
-            }
-            if(submitBtn) submitBtn.disabled = true;
-            
-            // Formatar e enviar para WhatsApp
-            const mensagem = formatarMensagem(dados);
-            const url = 'https://wa.me/' + WHATSAPP_NUM + '?text=' + mensagem;
-            
-            // Abrir WhatsApp em nova aba
-            window.open(url, '_blank');
-            
-            // Limpar formulário
-            form.reset();
-            
-            // Mostrar modal de sucesso
-            showModal();
-            
-            // Esconder loading
-            if(btnText && btnLoading) {
-                btnText.style.display = 'inline';
-                btnLoading.style.display = 'none';
-            }
-            if(submitBtn) submitBtn.disabled = false;
-        });
-    }
-    
-    // Fechar modal ao clicar fora
-    window.onclick = function(event) {
-        if(modal && event.target === modal) {
-            closeModal();
-        }
-    };
 });
